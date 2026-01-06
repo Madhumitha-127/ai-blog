@@ -1,47 +1,27 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const logout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "10px 20px",
-        borderBottom: "1px solid #ccc"
-      }}
-    >
-      <div>
-        <Link to="/" style={{ marginRight: "15px" }}>
-          Home
-        </Link>
+    <nav className="bg-gray-900 text-white px-6 py-4 flex justify-between">
+      <Link to="/" className="font-bold">AI Blog</Link>
 
-        {token && (
-          <Link to="/create">
-            Create Blog
-          </Link>
-        )}
-      </div>
-
-      <div>
-        {token ? (
-          <button onClick={logout}>Logout</button>
-        ) : (
+      <div className="space-x-4">
+        {!token ? (
           <>
-            <Link to="/login" style={{ marginRight: "10px" }}>
-              Login
-            </Link>
+            <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </>
+        ) : (
+          <button onClick={logout}>Logout</button>
         )}
       </div>
-    </div>
+    </nav>
   );
 }

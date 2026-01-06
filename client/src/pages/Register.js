@@ -1,72 +1,36 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "../api.js";
 
 export default function Register() {
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
-
-  const [error, setError] = useState("");
-
-  const submit = async () => {
-    setError(""); // clear old errors
-    try {
-      await API.post("/auth/register", {
-        name: form.name,
-        email: form.email,
-        password: form.password
-      });
-
-      // if register succeeds → go to login
-      navigate("/login");
-    } catch (err) {
-      console.error("REGISTER ERROR:", err);
-
-      // show backend error if exists
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Registration failed. Please try again.");
-      }
-    }
+  const submit = async (e) => {
+    e.preventDefault();
+    await API.post("/auth/register", { email, password });
+    window.location.href = "/login";
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Register</h2>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <form onSubmit={submit} className="max-w-md mx-auto mt-10">
+      <h2 className="text-2xl mb-4">Register</h2>
 
       <input
-        type="text"
-        placeholder="Name"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
-      <br /><br />
-
-      <input
-        type="email"
+        className="border w-full p-2 mb-3"
         placeholder="Email"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        onChange={(e) => setEmail(e.target.value)}
       />
-      <br /><br />
 
       <input
         type="password"
+        className="border w-full p-2 mb-3"
         placeholder="Password"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        onChange={(e) => setPassword(e.target.value)}
       />
-      <br /><br />
 
-      <button onClick={submit}>Register</button>
-    </div>
+      <button className="bg-green-500 text-white px-4 py-2 rounded">
+        Register
+      </button>
+    </form>
   );
 }

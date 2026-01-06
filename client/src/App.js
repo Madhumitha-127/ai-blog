@@ -8,15 +8,16 @@ import EditBlog from "./pages/EditBlog.js";
 import ProtectedRoute from "./ProtectedRoute.js";
 import Navbar from "./components/Navbar.js";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/" element={<Home />} />
 
         <Route
           path="/create"
@@ -39,5 +40,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

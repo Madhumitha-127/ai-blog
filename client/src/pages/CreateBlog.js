@@ -1,37 +1,36 @@
 import { useState } from "react";
 import API from "../api.js";
-import { useNavigate } from "react-router-dom";
 
 export default function CreateBlog() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const navigate = useNavigate();
 
-  const submit = async () => {
+  const submit = async (e) => {
+    e.preventDefault();
     await API.post("/blogs", { title, content });
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Create Blog</h2>
+    <form onSubmit={submit} className="max-w-xl mx-auto p-6">
+      <h2 className="text-2xl mb-4">Create Blog</h2>
 
       <input
+        className="border w-full p-2 mb-3"
         placeholder="Title"
-        value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <br /><br />
 
       <textarea
+        className="border w-full p-2 mb-3"
         placeholder="Content"
         rows="6"
-        value={content}
         onChange={(e) => setContent(e.target.value)}
       />
-      <br /><br />
 
-      <button onClick={submit}>Publish</button>
-    </div>
+      <button className="bg-blue-600 text-white px-4 py-2 rounded">
+        Publish
+      </button>
+    </form>
   );
 }

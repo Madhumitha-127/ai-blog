@@ -1,23 +1,37 @@
 import { useState } from "react";
 import API from "../api.js";
-import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [form, setForm] = useState({ email:"", password:"" });
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const submit = async () => {
-    const res = await API.post("/auth/login", form);
+  const submit = async (e) => {
+    e.preventDefault();
+    const res = await API.post("/auth/login", { email, password });
     localStorage.setItem("token", res.data.token);
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input placeholder="Email" onChange={e=>setForm({...form,email:e.target.value})}/>
-      <input type="password" placeholder="Password" onChange={e=>setForm({...form,password:e.target.value})}/>
-      <button onClick={submit}>Login</button>
-    </div>
+    <form onSubmit={submit} className="max-w-md mx-auto mt-10">
+      <h2 className="text-2xl mb-4">Login</h2>
+
+      <input
+        className="border w-full p-2 mb-3"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <input
+        type="password"
+        className="border w-full p-2 mb-3"
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button className="bg-blue-500 text-white px-4 py-2 rounded">
+        Login
+      </button>
+    </form>
   );
 }
